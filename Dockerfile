@@ -4,17 +4,16 @@ FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 # Set the working directory
 WORKDIR /app
 
-# Enable bytecode compilation and use copy mode. It makes startup time faster
+# Enable bytecode compilation and use copy mode
 ENV UV_COMPILE_BYTECODE=1
-# Cache mount
 ENV UV_LINK_MODE=copy
 
 # Copy only what's needed for the dependency sync (for caching)
 COPY pyproject.toml uv.lock ./
 
 # Install dependencies into a virtual environment
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --no-dev
+# Removed --mount to ensure compatibility with GCP Cloud Build
+RUN uv sync --frozen --no-install-project --no-dev
 
 # Copy the rest of the application
 COPY . .
