@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+.git/
+.env
+.python-version
+README.md
